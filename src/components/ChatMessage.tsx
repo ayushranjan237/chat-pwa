@@ -1,11 +1,12 @@
 import React from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
-
+import { FiPaperclip } from 'react-icons/fi';
 interface Message {
   id: number;
   sender: string;
   message: string;
   timestamp: string;
+  attachment?: string;
 }
 
 interface ChatMessageProps {
@@ -20,6 +21,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       direction="column"
       align={isUser ? 'flex-end' : 'flex-start'}
       mb={2}
+       // Limit message width for better readability
     >
       {!isUser && (
         <Text fontSize="sm" color="gray.500" mb={1}>
@@ -30,11 +32,23 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
         bg={isUser ? 'teal.500' : 'gray.200'}
         color={isUser ? 'white' : 'black'}
         borderRadius="lg"
-        px={4}
-        py={2}
-        maxWidth="70%"
+        p={3}
       >
-        {message.message}
+        {message.attachment ? (
+          <>
+            <Flex align="center" mb={2}>
+              <FiPaperclip size={18} />
+              <Text fontSize="sm" ml={2}>
+                Attachment
+              </Text>
+            </Flex>
+            <Box as="a" href={message.attachment} target="_blank" rel="noopener noreferrer">
+              View Attachment
+            </Box>
+          </>
+        ) : (
+          message.message
+        )}
       </Box>
       <Text fontSize="xs" color="gray.500" alignSelf={isUser ? 'flex-end' : 'flex-start'}>
         {message.timestamp}

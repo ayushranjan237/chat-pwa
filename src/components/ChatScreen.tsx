@@ -95,50 +95,54 @@ const ChatScreen: React.FC = () => {
   }, []);
 
   return (
-    <Flex
-      direction="column"
-      h="100vh"
-      p={4}
-      bg="gray.100"
-      fontFamily="Arial, sans-serif"
-    >
-    <Flex direction="column" h="100vh" p={4}>
-      <Box flex={1} overflowY="auto">
-        {chatMessages.map((message) => (
-          <ChatMessage key={message.id} message={message} />
-        ))}
-      </Box>
-      <Flex mt={4}>
-        <Input
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type your message..."
-          flex={1}
-          mr={2}
-        />
-
-<IconButton
-          icon={<FiPaperclip />}
-          as="label"
-          htmlFor="file-input"
-          cursor="pointer"
-          aria-label="Attach File"
-        />
-        <input
-          type="file"
-          id="file-input"
-          key={fileInputKey}
-          style={{ display: 'none' }}
-          onChange={handleFileChange}
-        />
-        <IconButton
-          icon={<FiSend />}
-          onClick={handleSendMessage}
-          aria-label="Send Message"
-        />
-      </Flex>
+    <Flex direction="column" h="100vh" p={4} bg="gray.100">
+    <Box flex={1} overflowY="auto">
+      {chatMessages.map((message) => (
+        <ChatMessage key={message.id} message={message} />
+      ))}
+    </Box>
+    <Flex mt={4} align="center">
+      <Input
+        value={newMessage}
+        onChange={(e) => setNewMessage(e.target.value)}
+        placeholder="Type your message..."
+        flex={1}
+        mr={2}
+        bg="white"
+        color="black"
+        border="1px solid #ccc"
+        borderRadius="md"
+        _focus={{ outline: 'none', boxShadow: '0 0 3px #00B8D9' }}
+      />
+      <IconButton
+        icon={<FiPaperclip />}
+        as="label"
+        htmlFor="file-input"
+        cursor="pointer"
+        aria-label="Attach File"
+        bg="teal.400"
+        color="white"
+        borderRadius="full"
+        _hover={{ bg: 'teal.500' }}
+      />
+      <input
+        type="file"
+        id="file-input"
+        key={fileInputKey}
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+      />
+      <IconButton
+        icon={<FiSend />}
+        onClick={handleSendMessage}
+        aria-label="Send Message"
+        bg="teal.500"
+        color="white"
+        borderRadius="full"
+        _hover={{ bg: 'teal.600' }}
+      />
     </Flex>
-    </Flex>
+  </Flex>
   );
 };
 
