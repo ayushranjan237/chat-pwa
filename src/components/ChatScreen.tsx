@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Box, Flex, Input, IconButton } from '@chakra-ui/react';
 import { FiSend, FiPaperclip} from 'react-icons/fi';
 import ChatMessage from './ChatMessage';
 import axios from 'axios';
 
-const PAGE_SIZE = 10; // Number of messages to fetch per page
+//const PAGE_SIZE = 10; // Number of messages to fetch per page
 
 interface Message {
   id: number;
@@ -29,6 +29,11 @@ const ChatScreen: React.FC = () => {
         `https://qa.corider.in/assignment/chat?page=${pageRef.current}`
       );
       const newMessages = response.data.messages;
+      if (!Array.isArray(newMessages)) {
+        // If the API response doesn't contain the 'messages' array
+        hasMoreMessagesRef.current = false;
+        return;
+      }
       if (newMessages.length === 0) {
         hasMoreMessagesRef.current = false;
       } else {
@@ -36,6 +41,7 @@ const ChatScreen: React.FC = () => {
       }
     } catch (error) {
       console.error('Error fetching chat data:', error);
+      hasMoreMessagesRef.current = false;
     }
   };
 
@@ -78,21 +84,21 @@ const ChatScreen: React.FC = () => {
   };
 
   // Function to handle infinite scrolling
-  const handleScroll = () => {
-    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+  const handleScroll = useCallback(() => {
+    const { scrollTop} = document.documentElement;
     if (scrollTop === 0 && hasMoreMessagesRef.current) {
       // When scrolled to the top and there are more messages to fetch
       pageRef.current++;
       fetchChatData();
     }
-  };
+  }, []);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [handleScroll]);
 
   return (
     <Flex direction="column" h="100vh" p={4} bg="gray.100">
